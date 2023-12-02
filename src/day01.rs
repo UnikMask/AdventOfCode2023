@@ -5,9 +5,6 @@ fn main() {
     let contents = load_file("resources/day01/actual.txt");
 
     let bytes_to_int = |s: Vec<u8>| {
-        if s.is_empty() {
-            return 0 as u32;
-        }
         let (mut l, mut r) = (0, s.len() - 1);
         while !(s[l] as char).is_digit(10) {
             l += 1
@@ -15,7 +12,6 @@ fn main() {
         while !(s[r] as char).is_digit(10) {
             r -= 1
         }
-        println!("{}{}", (s[l] - 48), (s[r] - 48));
         ((s[l] - 48) * 10 + (s[r] - 48)) as u32
     };
 
