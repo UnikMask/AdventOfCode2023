@@ -1,9 +1,9 @@
-use std::{fs, vec::Vec};
+use std::{fs::read_to_string, vec::Vec};
 
 pub fn load_file(fp: &str) -> Vec<String> {
-    fs::read_to_string(fp)
+    read_to_string(fp)
         .expect("File doesn't exist!")
-        .split("\n")
+        .lines()
         .map(|s| s.to_owned())
         .collect()
 }
