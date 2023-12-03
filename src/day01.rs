@@ -2,7 +2,7 @@ use aoc::load_file;
 
 fn main() {
     // Part 1
-    let contents = load_file("resources/day01/actual.txt");
+    let contents = load_file("resources/day01/example2.txt");
 
     let bytes_to_int = |s: Vec<u8>| {
         let (mut l, mut r) = (0, s.len() - 1);
@@ -24,15 +24,58 @@ fn main() {
 
     // Part 2
     // Solution - replace words with digits
-    // Better solutions out there (Sliding Window), but I didn't want to do 
+    // Better solutions out there (Sliding Window), but I didn't want to do
     // that.
-    let compares = vec![ ("one", "o1e"), ("two", "t2o"), ("three", "t3e"), ("four", "f4"), ("five", "f5e"), ("six", "s6"), ("seven", "s7n"), ("eight", "e8t"), ("nine", "n9e")];
-    let res2: u32 = contents.iter().map(|s| {
-        let mut sc = s.clone();
-        for (pattern, rep) in compares.iter() {
-            sc = sc.replace(pattern, rep);
-        }
-        sc.bytes().collect::<Vec<u8>>()
-    }).map(bytes_to_int).sum();
+    let compares = vec![
+        ("one", 1),
+        ("two", 2),
+        ("three", 3),
+        ("four", 4),
+        ("five", 5),
+        ("six", 6),
+        ("seven", 7),
+        ("eight", 8),
+        ("nine", 9),
+    ];
+    let compares: Vec<(Vec<u8>, u32)> = compares
+        .iter()
+        .map(|(w, d)| (w.bytes().collect::<Vec<u8>>(), *d as u32))
+        .collect();
+
+    let res2: u32 = contents
+        .iter()
+        .map(|s| {
+            let (mut first, mut last): (Option<u32>, Option<u32>) = (None, None);
+            let mut window: Vec<u8> = Vec::with_capacity(5);
+
+            // Sliding window through line
+            for c in s.bytes() {
+                if window.len() == 5 {
+                    window = window[1..].to_vec();
+                }
+                window.push(c);
+
+                // Find next digit if there is
+                let mut found: Option<u32> = None;
+                compares.iter().for_each(|(cmp, digit)| {
+                    if window.len() >= cmp.len() && window[..cmp.len()] == *cmp.as_slice() {
+                        found = Some(*digit);
+                    }
+                });
+                if found == None && c.is_ascii_digit() {
+                    found = Some(c as u32 - 48);
+                }
+
+                // Deal with found digit
+                if let Some(digit) = found {
+                    if first == None {
+                        first = Some(digit);
+                    }
+                    last = Some(digit);
+                }
+            }
+            first.unwrap() * 10 + last.unwrap()
+        })
+        .sum();
     println!("Part 2 result: {}", res2)
 }
