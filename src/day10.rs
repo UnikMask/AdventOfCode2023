@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, time::Instant};
 
 use aoc::load_file;
 
@@ -72,6 +72,7 @@ fn in_bounds(i: isize, j: isize, m: usize, n: usize) -> bool {
 }
 
 fn main() {
+    let now = Instant::now();
     let mut grid: Vec<Vec<char>> = load_file("resources/day10/actual.txt")
         .iter()
         .map(|line| line.chars().collect())
@@ -142,4 +143,5 @@ fn main() {
         }
     }
     println!("Part 2 result: {}", res2);
+    println!("Time elapsed: {}us", now.elapsed().as_micros());
 }

@@ -37,25 +37,23 @@ fn main() {
             while l < r {
                 let e = (l + r) / 2;
                 let spot = &map[e as usize];
+
                 if res > spot.0 + spot.2 - 1 {
                     l = e as i32 + 1;
                 } else if res < spot.0 {
                     r = e as i32 - 1;
                 } else {
-                    r = e;
-                    break;
+                    (r, l) = (e, e);
                 }
             }
-            if r < 0 {
-                continue;
-            }
-            let spot = &map[r as usize];
-            if res > spot.0 && res - spot.0 < spot.2 {
-                let nres = spot.1 + (res - spot.0);
-                res = nres;
+            if r >= 0 {
+                let spot = &map[r as usize];
+                if res > spot.0 && res - spot.0 < spot.2 {
+                    res = spot.1 + (res - spot.0);
+                }
             }
         }
         (seed, res)
-    }).min_by(|(_, resa), (_, resb)| resa.cmp(resb)).unwrap();
+    }).min_by(|resa, resb| resa.1.cmp(&resb.1)).unwrap();
     println!("Part 1 result: {:?}", res1.1);
 }
