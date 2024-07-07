@@ -9,7 +9,7 @@ const END_A: usize = 25 + (25 << 5);
 fn hash(node: &str) -> u16 {
     node.chars()
         .filter_map(|c| match c {
-            'A'..='Z' => Some((c as u16) - ('A' as u16) << 10),
+            'A'..='Z' => Some(((c as u16) - ('A' as u16)) << 10),
             _ => None,
         })
         .reduce(|a, b| (a >> 5) + b)
@@ -31,11 +31,11 @@ fn main() {
     let instructions: Vec<char> = contents[0].chars().collect();
     let n = instructions.len();
 
-    for i in 2..contents.len() {
+    (2..contents.len()).for_each(|i| {
         let parts = contents[i].split(" = ").collect::<Vec<&str>>();
-        let dirs: Vec<u16> = parts[1].split(", ").map(|node| hash(node)).collect();
+        let dirs: Vec<u16> = parts[1].split(", ").map(hash).collect();
         nodes[hash(parts[0]) as usize] = (dirs[0], dirs[1]);
-    }
+    });
 
     let next_item = |cur: usize, step: usize| match instructions[step % n] {
         'L' => nodes[cur].0,

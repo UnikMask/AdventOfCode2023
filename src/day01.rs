@@ -6,10 +6,10 @@ fn main() {
 
     let bytes_to_int = |s: Vec<u8>| {
         let (mut l, mut r) = (0, s.len() - 1);
-        while !(s[l] as char).is_digit(10) {
+        while !(s[l] as char).is_ascii_digit() {
             l += 1
         }
-        while !(s[r] as char).is_digit(10) {
+        while !(s[r] as char).is_ascii_digit() {
             r -= 1
         }
         ((s[l] - 48) * 10 + (s[r] - 48)) as u32
@@ -62,13 +62,13 @@ fn main() {
                         found = Some(*digit);
                     }
                 });
-                if found == None && c.is_ascii_digit() {
+                if found.is_none() && c.is_ascii_digit() {
                     found = Some(c as u32 - 48);
                 }
 
                 // Deal with found digit
                 if let Some(digit) = found {
-                    if first == None {
+                    if first.is_none() {
                         first = Some(digit);
                     }
                     last = Some(digit);

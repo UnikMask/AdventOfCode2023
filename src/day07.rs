@@ -15,12 +15,11 @@ fn get_hash(hand: &str, joker: bool) -> u32 {
     let (mut hash, mut counter): (u32, [u8; 13]) = (0, [0; 13]);
     hand.chars().enumerate().for_each(|(i, card)| {
         let crank = rank(card, joker);
-        hash += (crank << (4 - i) * 4) as u32;
+        hash += (crank << ((4 - i) * 4)) as u32;
         counter[crank] += 1;
     });
 
     let highest = (1..counter.len())
-        .into_iter()
         .max_by(|a, b| counter[*a].cmp(&counter[*b]))
         .unwrap();
     hash += ((joker as usize)..counter.len())
@@ -34,7 +33,7 @@ fn get_hash(hand: &str, joker: bool) -> u32 {
             } << 20
         )
         .sum::<u32>();
-    hash as u32
+    hash
 }
 
 fn main() {

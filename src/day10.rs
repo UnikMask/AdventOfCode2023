@@ -22,7 +22,7 @@ fn is_continuous(c: char, i: isize, j: isize) -> bool {
     .contains(&c)
 }
 
-fn get_nbs(i: isize, j: isize, grid: &Vec<Vec<char>>) -> Vec<(isize, isize)> {
+fn get_nbs(i: isize, j: isize, grid: &[Vec<char>]) -> Vec<(isize, isize)> {
     match grid[i as usize][j as usize] {
         'S' => vec![(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)],
         '|' => vec![(i - 1, j), (i + 1, j)],
@@ -36,7 +36,7 @@ fn get_nbs(i: isize, j: isize, grid: &Vec<Vec<char>>) -> Vec<(isize, isize)> {
 }
 
 fn neighbours(i: isize, j: isize) -> Vec<(isize, isize)> {
-    return vec![(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)];
+    vec![(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)]
 }
 
 // Transition function for inside outside test state machine
@@ -48,7 +48,7 @@ fn transition(state: InOut, input: Option<char>, total: &mut u32) -> InOut {
             Some(cur) => InOut::S2(cur),
         },
         InOut::S1(buf) => {
-            *total += buf * (input != None) as u32;
+            *total += buf * (input.is_none()) as u32;
             match input {
                 None => InOut::S1(buf + 1),
                 Some('L') => InOut::S2('F'),
@@ -122,7 +122,7 @@ fn main() {
                 Some((b, _)) => branches.contains(&b),
             },
             false => false,
-        } as usize).reduce(|a, b| a << 1 + b).unwrap();
+        } as usize).reduce(|a, b| a << (1 + b)).unwrap();
     grid[s.0 as usize][s.1 as usize] = match start_nbs {
         12 => '|', 10 => 'J', 9 => 'L', 6 => '7', 5 => 'F', _ => '-',
     };
@@ -134,7 +134,7 @@ fn main() {
         for (j, e) in row.iter().enumerate() {
             let input = match e {
                 None => None,
-                Some((b, _)) => match branches.contains(&b) {
+                Some((b, _)) => match branches.contains(b) {
                     true => Some(grid[i][j]),
                     false => None,
                 } ,

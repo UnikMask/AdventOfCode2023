@@ -20,7 +20,7 @@ fn main() {
         if !bad {
             sum1 += parts[0].split_whitespace().nth(1).unwrap().to_string().parse::<u32>().unwrap();
         }
-        sum2 += minv.iter().map(|i| *i).product::<u32>();
+        sum2 += minv.iter().copied().product::<u32>();
     }
     println!("Part 1: {}, Part 2: {}", sum1, sum2);
 }

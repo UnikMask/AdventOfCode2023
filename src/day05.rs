@@ -39,9 +39,9 @@ fn main() {
                 let spot = &map[e as usize];
 
                 if res > spot.0 + spot.2 - 1 {
-                    l = e as i32 + 1;
+                    l = e + 1;
                 } else if res < spot.0 {
-                    r = e as i32 - 1;
+                    r = e - 1;
                 } else {
                     (r, l) = (e, e);
                 }

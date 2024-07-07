@@ -32,10 +32,9 @@ fn main() {
     println!("Part 1 result: {}", res1);
 
     let bigrace = load_file("resources/day06/actual.txt").iter().map(|line| {
-        line.split(":")
+        line.split(':')
             .nth(1)
             .unwrap()
-            .trim()
             .split_whitespace()
             .collect::<String>()
             .parse::<f64>().unwrap()

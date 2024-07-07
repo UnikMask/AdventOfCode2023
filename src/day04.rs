@@ -30,7 +30,7 @@ fn main() {
     println!("Part 1 solution: {}", res1);
 
     // Part 2
-    let (mut cards, n) = (vec![1 as u32; contents.len()], contents.len());
+    let (mut cards, n) = (vec![1_u32; contents.len()], contents.len());
     let mut total = n as u32;
     for i in 0..n {
         let mut ii: usize = 1;

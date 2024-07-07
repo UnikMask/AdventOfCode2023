@@ -9,26 +9,20 @@ fn main() {
     // Get empty columns and rows
     let (m, n) = (contents.len(), contents[0].len());
     let empty_rows: Vec<usize> = (0..m)
-        .filter_map(|i| match (0..n).find(|j| contents[i][*j]) {
-            None => Some(i),
-            Some(_) => None,
-        })
+        .filter(|i| !(0..n).any(|j| contents[*i][j]))
         .collect();
     let empty_cols: Vec<usize> = (0..n)
-        .filter_map(|j| match (0..m).find(|i| contents[*i][j]) {
-            None => Some(j),
-            Some(_) => None,
-        })
+        .filter(|j| !(0..m).any(|i| contents[i][*j]))
         .collect();
     let (rown, coln) = (empty_rows.len(), empty_cols.len());
 
     // Get galaxies for any age
     let get_galaxies = |age: usize| -> Vec<(i64, i64)> {
         let (age, mut rowi, mut res) = (age - 1, 0, vec![]);
-        for i in 0..m {
+        (0..m).for_each(|i| {
             if rowi < rown && empty_rows[rowi] == i {
                 rowi += 1;
-                continue;
+                return;
             }
             let mut coli = 0;
             for j in 0..n {
@@ -38,7 +32,7 @@ fn main() {
                     res.push(((i + rowi * age) as i64, (j + coli * age) as i64));
                 }
             }
-        }
+        });
         res
     };
 
